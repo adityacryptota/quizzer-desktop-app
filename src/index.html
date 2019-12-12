@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quizzer</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            color: white;
+            will-change: transform transition;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            background-color: black;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            font-size: 1.5rem;
+            padding: 2rem 0 0 2rem;
+            font-weight: bold;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: white;
+        }
+
+        .intro {
+            height: 100vh;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: black;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .intro-content {
+            display: flex;
+            flex-direction: column;
+            animation: entry 1s ease;
+        }
+
+        .intro-content .btn {
+            max-width: 8rem;
+        }
+
+        .intro-content span {
+            transition: all 1s;
+            font-size: 2rem;
+        }
+
+        .ready {
+            font-size: 1rem;
+        }
+
+        .remove-element {
+            animation: remove 1s ease;
+        }
+
+        .content {
+            width: 50rem;
+            padding: 1rem;
+            animation: appear 0.5s ease;
+            text-align: center;
+            visibility: hidden;
+        }
+
+        .animate-content {
+            animation: entry 0.5s ease;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 1.5rem;
+        }
+
+        li {
+            border: 2px solid white;
+            padding: 0.5rem 1rem;
+            border-radius: 5rem;
+            transition: all 0.2s;
+            box-shadow: 0 10px 20px rgb(124, 124, 124);
+        }
+
+        li:hover {
+            background-color: white;
+            color: black;
+            transform: translateY(-0.3rem);
+            cursor: pointer;
+        }
+
+        li:active {
+            transform: translateY(-0.2rem);
+            box-shadow: 0 7px 15px rgb(197, 196, 196);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 2px solid white;
+            text-decoration: none;
+            color: white;
+            border-radius: 5rem;
+            margin-top: 2rem;
+            transition: all 0.2s;
+            box-shadow: 0 10px 20px rgb(124, 124, 124);
+        }
+
+        .btn:hover {
+            background-color: white;
+            color: black;
+            transform: translateY(-0.2rem);
+        }
+
+        .btn:active {
+            transform: translateY(-0.1rem);
+            box-shadow: 0 7px 15px rgb(197, 196, 196);
+        }
+
+        .active-option {
+            background-color: white;
+            color: black;
+        }
+
+        @keyframes appear {
+            0% {
+                transform: translateY(-5rem);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes entry {
+            0% {
+                transform: translateX(5rem);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes remove {
+            0% {
+                transform: translate(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-5rem);
+                opacity: 0;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            ul {
+                grid-template-columns: 1fr;
+            }
+
+            .intro {
+                padding: 2rem;
+            }
+
+            .content {
+                padding: 2rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<!-- Content -->
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <a href="" class="brand">Quizzer</a>
+        </div>
+        <div class="intro">
+            <div class="intro-content">
+                <span class="heading-main">Ready to test your general knowledge?</span>
+                <a href="#" class="btn ready">Absolutely!</a>
+            </div>
+        </div>
+        <div class="content">
+            <h2 class="question"></h2>
+            <ul class="options">
+
+            </ul>
+            <a href="#" class="btn next-btn">Next -></a>
+        </div>
+    </div>
+
+    <!-- Logic -->
+    <script>
+        const questionToShow = document.querySelector('.question');
+        const optionsToShow = document.querySelector('.options');
+        const nextBtn = document.querySelector('.next-btn');
+        let ready = document.querySelector('.ready');
+        let headingMain = document.querySelector('.heading-main');
+        let intro = document.querySelector('.intro');
+        let content = document.querySelector('.content');
+
+        ready.addEventListener('click', (e) => {
+            e.preventDefault();
+            headingMain.classList.add('remove-element');
+            ready.classList.add('remove-element');
+            headingMain.addEventListener('animationend', () => {
+                headingMain.style.visibility = 'hidden';
+                intro.style.display = 'none';
+                content.classList.add('animate-content');
+                content.style.visibility = 'visible';
+            });
+        });
+
+        let questions = [{
+            question: 'Who was the first president of India?',
+            options: ['Narendra Modi', 'Rajendra Prasad', 'Manmohan Singh', 'Atalbihari Vajpayee'],
+            answer: 'Rajendra Prasad'
+        },
+        {
+            question: 'Who is the current prime minister of India?',
+            options: ['Narendra Modi', 'Rajendra Prasad', 'Manmohan Singh', 'Atalbihari Vajpayee'],
+            answer: 'Narendra Modi'
+        },
+        {
+            question: 'Who is the currently alotted governor of MP?',
+            options: ['Lalji Tandon', 'Rajendra Prasad', 'Manmohan Singh', 'Atalbihari Vajpayee'],
+            answer: 'Lalji Tandon'
+        },
+        {
+            question: 'Who was the first woman finance minister of India?',
+            options: ['Narendra Modi', 'Rajendra Prasad', 'Nirmala Seetaraman', 'Atalbihari Vajpayee'],
+            answer: 'Nirmala Seetaraman'
+        },
+        {
+            question: 'Who invented internet?',
+            options: ['Narendra Modi', 'Tim Berner Lee', 'Manmohan Singh', 'Atalbihari Vajpayee'],
+            answer: 'Tim Berner Lee'
+        }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswer = 0;
+        let selectedOption;
+
+        function questionRender(currentQ) {
+            // Showing question
+            questionToShow.innerHTML = questions[currentQ].question;
+            // Rendering the options in html
+            questions[currentQ].options.forEach((option) => {
+                optionsToShow.insertAdjacentHTML('beforeend', `<li>${option}</li>`);
+            });
+        }
+        questionRender(currentQuestion);
+
+        // Moving to next question
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            selectedOption = document.querySelector('.active-option');
+            if (selectedOption != null) {
+                content.classList.toggle('animate-content');
+                if (questions[currentQuestion].answer === selectedOption.textContent) {
+                    correctAnswer++
+                }
+                if (currentQuestion < questions.length - 1) {
+                    optionsToShow.innerHTML = '';
+                    currentQuestion++;
+                    questionRender(currentQuestion);
+                } else {
+                    questionToShow.innerHTML = `Your score is ${correctAnswer}/${questions.length}!`;
+                    optionsToShow.innerHTML = '';
+                    nextBtn.style.display = 'none';
+                }
+                activeOption();
+            } else {
+                alert('You need to select an option first');
+            }
+        });
+
+        // Adding active style to every li
+
+        function activeOption() {
+            let everyLi = document.querySelectorAll('li');
+            let childItems;
+            everyLi.forEach((li) => {
+                li.addEventListener('click', (e) => {
+                    // Removing active-option class from every li
+                    if (li.parentNode.childNodes.length == 5) {
+                        childItems = 1;
+                        while (childItems < 5) {
+                            li.parentNode.childNodes[childItems].classList.remove('active-option');
+                            childItems++;
+                        }
+                    } else {
+                        childItems = 0;
+                        while (childItems < 4) {
+                            li.parentNode.childNodes[childItems].classList.remove('active-option');
+                            childItems++;
+                        }
+                    }
+                    li.classList.add('active-option');
+                });
+            });
+        }
+
+        activeOption();
+    </script>
+</body>
+
+</html>
